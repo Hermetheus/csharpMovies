@@ -1,0 +1,14 @@
+﻿@page "/counter"
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+<p>Transient count: @transient.Value</p>
+<p>Singleton count: @singleton.Value</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<input type="number" @bind="currentCount" />
+
+
+<MoviesList Movies="movies" />

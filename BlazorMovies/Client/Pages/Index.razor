@@ -1,0 +1,44 @@
+﻿@page "/"
+@inject SingletonService singleton
+@inject IRepository repository
+
+
+<div>
+    <h3>Movie</h3>
+    <MoviesList Movies="movies" />
+    <p>Singleton count: @singleton.Value</p>
+
+</div>
+
+<button @onclick="AddNewMovie">Add new movie</button>
+
+@*<div>
+    <h2>Create a Movie</h2>
+
+    <DummyTextbox @attributes="@(new Dictionary<string, object>() { { "placeholder", "new movie name" }, { "disabled", "false" } })" />
+</div>*@
+
+
+@code {
+
+    private List<Movie> movies;
+
+    protected async override Task OnInitializedAsync()
+
+    {
+        await Task.Delay(3000);
+        movies = repository.GetMovies();
+    }
+
+    private void AddNewMovie()
+    {
+        movies.Add(new Movie() { Title = "Movie Sample", ReleaseDate = DateTime.Today });
+    }
+
+
+    void WriteInLog()
+    {
+        Console.WriteLine("I've been clicked! (From Method)");
+    }
+}
+

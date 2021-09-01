@@ -1,0 +1,51 @@
+﻿@inject IJSRuntime js
+
+<input type="checkbox" @bind="displayButtons" />
+
+<GenericList List="Movies">
+    <ElementTemplate Context="movie">
+        <IndividualMovie Movie="movie" DisplayButtons="displayButtons" DeleteMovie="DeleteMovie"></IndividualMovie>
+    </ElementTemplate>
+</GenericList>
+
+
+
+
+
+@code {
+    [Parameter] public List<Movie> Movies { get; set; }
+
+    bool displayButtons = true;
+
+
+    private async Task DeleteMovie(Movie movie)
+    {
+        await js.MyFunction("custom message");
+        var confirmed = await js.Confirm($"Are you sure you want to delete {movie.Title}");
+
+        if (confirmed)
+            {
+        Movies.Remove(movie);
+
+            }
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("On Initialized. Movies.Count = " + Movies.Count.ToString());
+    }
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine("On Parameters Set. Movies.Count = " + Movies.Count.ToString());
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine("OnAfterRender. Movies.Count = " + firstRender.ToString());
+    }
+
+    protected override bool ShouldRender()
+    {
+        return true;
+    }
+
+}

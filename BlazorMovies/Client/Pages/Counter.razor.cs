@@ -14,7 +14,8 @@ namespace BlazorMovies.Client.Pages
     {
         [Inject] SingletonService singleton { get; set; }
         [Inject] TransientService transient { get; set; }
-[Inject] IJSRuntime js { get; set; }
+        [Inject] IJSRuntime js { get; set; }
+
         private List<Movie> movies;
         protected override void OnInitialized()
         {
@@ -29,10 +30,15 @@ namespace BlazorMovies.Client.Pages
 
         private int currentCount = 0;
         private static int currentCountStatic = 0;
+        IJSObjectReference module;
 
         [JSInvokable]
         public async Task IncrementCount()
         {
+            module = await js.InvokeAsync<IJSObjectReference>("import", "./js/Counter.js");
+
+            await module.InvokeVoidAsync("displayAlert", "hello world");
+
             currentCount++;
             singleton.Value += 1;
             transient.Value += 1;
